@@ -1,0 +1,4 @@
+D *.bmp
+D *.o
+R main.c
+S files

@@ -1,0 +1,11 @@
+MPI_Init
+MPI_Finalize
+MPI_Abort
+MPI_Send
+MPI_Recv
+MPI_Scatter
+MPI_Gather
+MPI_Scatterv
+MPI_Gatherv
+malloc
+free
