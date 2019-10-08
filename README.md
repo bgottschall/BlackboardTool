@@ -20,7 +20,7 @@ Takes a ZIP file with all submissions downloaded from Blackboard and extracts it
     src (src files either directly submitted or extracted from attached archives)
 ```
 
-It supports different archiving formats like zip, tgz, rar... and uses tools like 7zip, unrar and unzip to extract them. Document file extensions and Source file extensions are setup at the beginning of that script and decide which files are sorted to where. It only extracts the first archive into the src directory and.
+It supports different archiving formats like zip, tgz, rar... and uses tools like 7zip, unrar and unzip to extract them. Document file extensions and Source file extensions are setup at the beginning of that script and decide which files are sorted to where. It only extracts the first archive into the src directory.
 
 ## bb\_repair.sh
 
@@ -31,7 +31,7 @@ Options:
     -h, --help                 this help page
 ```
 
-Can be applied on an extracted folder from bb\_extract.sh and uses an template to repair the source files from a submission. The repair template is a folder containing a file called 'repair. That file contains rules which are applied on order on the students src folder.
+Can be applied on an extracted folder from bb\_extract.sh and uses an template to repair the source files from a submission. The repair template is a folder containing a file called 'repair. That file contains rules which are applied in order on the students src folder.
 
 ```
 D *.bmp
@@ -52,7 +52,7 @@ Options:
     -c, --counters  counter file
     -h, --help      this help page
 ```
-This tool takes a counter file in which each line represents a symbol that is going to be counted in the src folder. It then counts each symbol for each students src folder (be aware that binary files can also include that symbol, thus should be cleaned up before using bb\_repair.sh). At the end it compares all counters for every student and ouputs those who have the same symbol count. This helps finding plagiarism by counting common symbols that should be included in the submission anyway. It also gives you a nice and short summary of which symbols the student used.
+This tool takes a counter file in which each line represents a symbol that is going to be counted in the src folder. It then counts each symbol for each students src folder (be aware that binary files can also include that symbol, thus should be cleaned up before using bb\_repair.sh). At the end it compares all counters of every student and ouputs those who have the same symbol count. This helps finding plagiarism by counting common symbols. It also gives you a nice and short summary of which symbols the student used.
 
 ## bb\_evaluate.sh
 
