@@ -82,28 +82,36 @@ if [ ! -d "$TARGET" ]; then
     error "Folder '$TARGET' does not exist!"
 fi
 
+allstudents=""
+for student in $TARGET/*; do
+    if [ -f "${student}/$(basename ${student}).txt" ]; then
+        [ "x$allstudents" == "x" ] && allstudents=$student || allstudents="$allstudents $student"
+        allstudents="$allstudents $(basename $student)"
+    fi
+done
 
+num=0
 while :; do
-    found=0
+    if [ $num -ne 0 ]; then
+        tput clear
+    fi
     read -p "Search for student: " name
-    students=""
     num=0
-    students=$(grep -l "$name" "$TARGET"/*/*.txt | while IFS= read file; do
-                    if [ "$(basename $file)" != "symbol_stat.txt" ]; then
-                        username=$(basename $file)
-                        username=${username%.*}
-                        grep "Name: " $file | head -n 1 | sed -e "s/Name: /[$num] /"
-                        num=$(($num + 1))
-                    fi
-               done)
-    echo "$students"
-    num=$(echo "$students" | wc -l)
+    found=""
+    for student in $allstudents; do
+        file="$TARGET"/"$student"/"$student".txt
+        if [ -f "$file" ]; then
+            fullname=$(grep "Name: " "$file" | head -n 1 | grep -i "$name" 2>/dev/null)
+            if [ $? -eq 0 ]; then
+                [ "x$found" == "x" ] && found=$student || found="$found $student"
+                echo $fullname | sed -e "s/Name: /[$num] /"
+                num=$(($num + 1))
+            fi
+        fi
+    done
     if [ $num -gt 0 ]; then
-        student=-1
         if [ $num -gt 1 ]; then
-            student="false"
             choice=-2
-            $student
             while [ $choice -lt 0 ] || [ $choice -ge $num ]; do
                 read -p "Choose a student [-1=exit]: " choice
                 if ! echo -n "$choice" | grep -qE '([0-9]+)'; then
@@ -114,53 +122,57 @@ while :; do
                 fi
             done
             if [ $choice -ge 0 ]; then
-                students=$(echo -n "$students" | head -n $(($choice + 1)) | tail -n 1)
+                student=$(echo -n $found | tr ' ' '\n' | head -n $(($choice + 1)) | tail -n 1)
                 num=1
             fi
+        else
+            student=$found
         fi
 
         if [ $num -eq 1 ]; then
-            fullname=$(echo -n "$students" | sed -e 's/\[[0-9]*\] //')
-            student=$(echo -n "$fullname" | grep -Eo '\(.+\)' | sed -e 's/[()]//g')
             STUDENT_DIR="$TARGET"/"$student"
+            fullname=$(grep "Name: " "${STUDENT_DIR}/${student}.txt" | head -n 1 | sed -e 's/Name: //')
             key="y"
+            error=0
             while [ "$key" != "q" ]; do
-                tput clear
-                echo "Student: $fullname"
-                echo ""
-                echo "[e] Show eval.log"
-                echo "[x] Show exec.log"
-                echo "[s] Open source"
-                echo "[d] View Documentation"
-                echo "[f] Open student folder"
-                echo "[q] Quit"
-                echo ""
+                if [ $error -eq 0 ]; then
+                    tput clear
+                    echo "Student: $fullname"
+                    echo ""
+                    echo "[e] Show eval.log"
+                    echo "[x] Show exec.log"
+                    echo "[s] Open source"
+                    echo "[d] View Documentation"
+                    echo "[f] Open student folder"
+                    echo "[q] Quit"
+                    echo ""
+                fi
+                error=0
                 read -n1 -r -s key
                 key=${key,,}
                 case "$key" in
                    e)
                        if [ -f "$STUDENT_DIR"/eval.log ]; then
-                           less "$STUDENT_DIR"/eval.log
+                           fold -w 81 "$STUDENT_DIR"/eval.log | less
                        else
                            echo "Could not find eval.log"
+                           error=1
                        fi
                    ;;
                    x)
                        if [ -f "$STUDENT_DIR"/exec.log ]; then
-                           less "$STUDENT_DIR"/exec.log
+                           fold -w 81 "$STUDENT_DIR"/exec.log | less
                        else
                            echo "Could not find exec.log"
+                           error=1
                        fi
                        ;;
                    d)
-                       if [ $(ls $STUDENT_DIR/doc | wc -l) -gt 0 ]; then
-                           find "$STUDENT_DIR"/doc -type f | while IFS= read file; do
-                               echo $file
-                               read
-                               xdg-open $file >/dev/null 2>/dev/null
-                           done
+                       if [ $(ls "${STUDENT_DIR}/doc" | wc -l) -gt 0 ]; then
+                           find "$STUDENT_DIR"/doc -type f -exec xdg-open {} >/dev/null 2>/dev/null \;
                        else
                            echo "Could not find any documentation"
+                           error=1
                        fi
                        ;;
                    s)
