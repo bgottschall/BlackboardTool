@@ -36,12 +36,12 @@ Can be applied on an extracted folder from bb\_extract.sh and uses an template t
 ```
 D *.bmp
 D *.o
+E make clean
 R main.c
 S files
 ```
 
-The 'D' rule deletes the files that match this pattern. The 'R' rule requires the specified file or folder and stops if it doesn't exist. The 'S' rule applies a folder structure for repair, which creates and copies files from that folder to the students src folder if they are non existent.
-
+The 'D' rule deletes the files that match this pattern. The 'R' rule requires the specified file or folder and stops if it doesn't exist. The 'S' rule applies a folder structure for repair, which creates and copies files from that folder to the students src folder if they are non existent. The 'E' rule executes the following in the src directory of the student
 
 ## bb\_symbols.sh
 
