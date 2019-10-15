@@ -89,9 +89,17 @@ cat "$REPAIR"/repair | while IFS= read line; do
         for student in $students; do
             requiredPath="$TARGET"/"$student"/src/"$WHAT"
             if [ ! -f "$requiredPath" ] && [ ! -d "$requiredPath" ] ; then
-                echo "Required file '$WHAT' does not exist for '$student'!"
+                echo "Required file '$requiredPath' does not exist for '$student'!"
+                pwd
                 TERMINATE=1
             fi
+        done
+    elif [ "$CMD" == "E" ]; then
+        for student in $students; do
+            execPath="$TARGET"/"$student"/src/
+            pushd $execPath >/dev/null
+            $WHAT
+            popd >/dev/null
         done
     elif [ "$CMD" == "S" ]; then
         structureRegex=$(echo "$REPAIR"/"$WHAT"/ | sed -e 's/[]\/$*.^[]/\\&/g')
