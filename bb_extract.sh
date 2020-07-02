@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-filetypeDoc="pdf doc txt"
-filetypeSrc="makefile c cpp h hh"
+filetypeDoc="pdf doc txt md"
+filetypeSrc="makefile c cpp h hh cu"
 fileSrc="cmakelists.txt"
 
 
