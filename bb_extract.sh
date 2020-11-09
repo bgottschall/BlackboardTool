@@ -95,13 +95,13 @@ fileSrc=" ${fileSrc} "
 TMPDIR=$(mktemp -d)
 [ "x$TMPDIR" == "x" ] || [ ! -d "$TMPDIR" ] && error "ERROR: could not create temporary directory!"
 
-unzip -qq "$BBZIP" -d "$TMPDIR" || { rm -Rf $TMPDIR; error "ERROR: could not extract $BBZIP"; }
+unzip -qq "$BBZIP" -d "$TMPDIR" || { rm -Rf "$TMPDIR"; error "ERROR: could not extract $BBZIP"; }
 
 
 mkdir -p "$TARGET" || { rm -Rf "$TMPDIR"; error; }
 
 for i in "$TMPDIR"/*.txt; do
-    USERNAME=$(egrep -o '^(Name|Navn):.+\(.+\)' "$i" | head -n 1 | sed 's/.*(//' | sed 's/).*//')
+    USERNAME=$(grep -Eo '^(Name|Navn):.+\(.+\)' "$i" | head -n 1 | sed 's/.*(//' | sed 's/).*//')
     if [ "x$USERNAME" != "x" ]; then
         BASE=${i%.txt}
         SRCEXISTS=0

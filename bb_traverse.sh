@@ -95,16 +95,16 @@ while :; do
     if [ $num -ne 0 ]; then
         tput clear
     fi
-    read -p "Search for student: " name
+    read -rp "Search for student: " name
     num=0
     found=""
     for student in $allstudents; do
         file="$TARGET"/"$student"/"$student".txt
         if [ -f "$file" ]; then
-            fullname=$(grep "Name: " "$file" | head -n 1 | grep -i "$name" 2>/dev/null)
+            fullname=$(grep -E '(Name|Navn): ' "$file" | head -n 1 | grep -i "$name" 2>/dev/null)
             if [ $? -eq 0 ]; then
                 [ "x$found" == "x" ] && found=$student || found="$found $student"
-                echo $fullname | sed -e "s/Name: /[$num] /"
+                echo "$fullname" | sed -E "s/(Name|Navn): /[$num] /"
                 num=$(($num + 1))
             fi
         fi
@@ -131,7 +131,7 @@ while :; do
 
         if [ $num -eq 1 ]; then
             STUDENT_DIR="$TARGET"/"$student"
-            fullname=$(grep "Name: " "${STUDENT_DIR}/${student}.txt" | head -n 1 | sed -e 's/Name: //')
+            fullname=$(grep -E '(Name|Navn): ' "${STUDENT_DIR}/${student}.txt" | head -n 1 | sed -E 's/(Name|Navn): //')
             key="y"
             error=0
             while [ "$key" != "q" ]; do
