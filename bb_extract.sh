@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-filetypeDoc="pdf doc txt md"
-filetypeSrc="makefile c cpp h hh cu"
+filetypeDoc="pdf doc txt md docx xls xlsx"
+filetypeSrc="makefile c cpp h hh cu py ipynb"
 fileSrc="cmakelists.txt"
 
 
@@ -101,7 +101,7 @@ unzip -qq "$BBZIP" -d "$TMPDIR" || { rm -Rf $TMPDIR; error "ERROR: could not ext
 mkdir -p "$TARGET" || { rm -Rf "$TMPDIR"; error; }
 
 for i in "$TMPDIR"/*.txt; do
-    USERNAME=$(egrep -o '^Name:.+\(.+\)' "$i" | head -n 1 | sed 's/.*(//' | sed 's/).*//')
+    USERNAME=$(egrep -o '^(Name|Navn):.+\(.+\)' "$i" | head -n 1 | sed 's/.*(//' | sed 's/).*//')
     if [ "x$USERNAME" != "x" ]; then
         BASE=${i%.txt}
         SRCEXISTS=0

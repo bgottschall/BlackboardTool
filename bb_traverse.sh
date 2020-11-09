@@ -153,7 +153,7 @@ while :; do
                 case "$key" in
                    e)
                        if [ -f "$STUDENT_DIR"/eval.log ]; then
-                           fold -w 81 "$STUDENT_DIR"/eval.log | less
+                           fold -w 91 "$STUDENT_DIR"/eval.log | less
                        else
                            echo "Could not find eval.log"
                            error=1
@@ -161,7 +161,7 @@ while :; do
                    ;;
                    x)
                        if [ -f "$STUDENT_DIR"/exec.log ]; then
-                           fold -w 81 "$STUDENT_DIR"/exec.log | less
+                           fold -w 91 "$STUDENT_DIR"/exec.log | less
                        else
                            echo "Could not find exec.log"
                            error=1
