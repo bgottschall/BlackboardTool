@@ -90,7 +90,6 @@ cat "$REPAIR"/repair | while IFS= read line; do
             requiredPath="$TARGET"/"$student"/src/"$WHAT"
             if [ ! -f "$requiredPath" ] && [ ! -d "$requiredPath" ] ; then
                 echo "Required file '$requiredPath' does not exist for '$student'!"
-                pwd
                 TERMINATE=1
             fi
         done

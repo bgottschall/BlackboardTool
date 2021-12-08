@@ -139,8 +139,9 @@ while :; do
                     tput clear
                     echo "Student: $fullname"
                     echo ""
-                    echo "[e] Show eval.log"
-                    echo "[x] Show exec.log"
+                    [ -e "${STUDENT_DIR}/eval.log" ] && echo "[e] Show eval.log"
+                    [ -e "${STUDENT_DIR}/exec.log" ] && echo "[x] Show exec.log"
+                    [ -e "${STUDENT_DIR}/test.log" ] && echo "[t] Show test.log"
                     echo "[s] Open source"
                     echo "[d] View Documentation"
                     echo "[f] Open student folder"
@@ -167,7 +168,15 @@ while :; do
                            error=1
                        fi
                        ;;
-                   d)
+                  t)
+                       if [ -f "$STUDENT_DIR"/test.log ]; then
+                           fold -w 91 "$STUDENT_DIR"/test.log | less
+                       else
+                           echo "Could not find test.log"
+                           error=1
+                       fi
+ 	                   ;;
+				   d)
                        if [ $(ls "${STUDENT_DIR}/doc" | wc -l) -gt 0 ]; then
                            find "$STUDENT_DIR"/doc -type f -exec xdg-open {} >/dev/null 2>/dev/null \;
                        else

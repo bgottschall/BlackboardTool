@@ -8,7 +8,7 @@ Options:
     -q, --quiet                no interactive questions
     -f, --force                (re)evaluate all
     -s, --script <script>      use evaluation script
-    -r, --ressource            pass ressource directory to script
+    -r, --resource             pass resource directory to script
     -h, --help                 this help page"
 }
 
@@ -46,7 +46,7 @@ error() {
 }
 
 SHORT=hqfs:r:
-LONG=help,quiet,force,script:,ressource:
+LONG=help,quiet,force,script:,resource:
 
 
 PARSED=$(getopt --options $SHORT --longoptions $LONG --name "$0" -- "$@")
@@ -79,7 +79,7 @@ while :; do
            SCRIPT="$2"
            shift 2
            ;;
-       -r|--ressource)
+       -r|--resource)
            RESDIR="$2"
            shift 2
            ;;
@@ -166,7 +166,7 @@ for student in $students; do
                 fi
             fi
             if [ $RUN -ne 0 ]; then
-                source "$SCRIPT" "$STUDENT_DIR" "$RESDIR" | tee -a $OUTPUT
+                source "$SCRIPT" "$STUDENT_DIR" "$RESDIR" 2>&1 | tee -a $OUTPUT
             fi
         fi
         echo "========================================================================" | tee -a $OUTPUT

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 filetypeDoc="pdf doc txt md docx xls xlsx"
-filetypeSrc="makefile c cpp h hh cu py ipynb"
+filetypeSrc="makefile c cpp h hh cu py ipynb s"
 fileSrc="cmakelists.txt"
 
 
